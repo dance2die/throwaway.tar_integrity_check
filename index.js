@@ -19,15 +19,15 @@ const tar = require("tar");
 //   });
 
 const urls = [
-  `https://registry.npmjs.org/jquery/-/jquery-3.3.1.tgz`
-  // `http://registry.npmjs.org/react/-/react-16.4.0-alpha.7926752.tgz`,
-  // `https://registry.npmjs.org/chalk/-/chalk-2.4.1.tgz`,
-  // `http://registry.npmjs.org/express/-/express-4.16.3.tgz`
+  `https://registry.npmjs.org/jquery/-/jquery-3.3.1.tgz`,
+  `http://registry.npmjs.org/react/-/react-16.4.0-alpha.7926752.tgz`,
+  `https://registry.npmjs.org/chalk/-/chalk-2.4.1.tgz`,
+  `http://registry.npmjs.org/express/-/express-4.16.3.tgz`
 ];
 
 urls.forEach(printTarJavaScriptFiles);
 
-const sourcePattern = /^.+\/src\/.*/gi;
+const ignoredDirectoryPattern = /^.+\/(src|lib)\/.*/gi;
 // Michael Jackson's unpkg source
 // https://github.com/unpkg/unpkg.com/blob/21ed6ee42e298b7eb640ed35912e9c0355c1270d/modules/middleware/findFile.js#L29
 // Turns 'package/dist/jquery.js into 'dist/jquery.js
@@ -49,7 +49,7 @@ function printTarJavaScriptFiles(tarUrl) {
         // console.log(`URL => ${tarUrl}`);
         // if (entry.path.endsWith(".js")) console.log(entry.path);
         // console.log(`=====================================`);
-        if (entry.path.match(sourcePattern)) return;
+        if (entry.path.match(ignoredDirectoryPattern)) return;
         if (entry.path.endsWith(".js"))
           entries.push(entry.path.replace(leadingSegmentPattern, ""));
       })
