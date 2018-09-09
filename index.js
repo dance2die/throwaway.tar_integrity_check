@@ -23,12 +23,15 @@ const urls = [
   `http://registry.npmjs.org/react/-/react-16.4.0-alpha.7926752.tgz`,
   `https://registry.npmjs.org/chalk/-/chalk-2.4.1.tgz`,
   `http://registry.npmjs.org/express/-/express-4.16.3.tgz`,
-  `https://registry.npmjs.org/lodash/-/lodash-4.17.10.tgz`
+  `https://registry.npmjs.org/lodash/-/lodash-4.17.10.tgz`,
+  `https://registry.npmjs.org/calendar-dates/-/calendar-dates-2.1.4.tgz`,
+  `https://registry.npmjs.org/styled-components/-/styled-components-4.0.0-beta.1-2.tgz`
 ];
 
 urls.forEach(printTarJavaScriptFiles);
 
-const ignoredDirectoryPattern = /^.+\/(src|lib)\/.*/gi;
+// const ignoredDirectoryPattern = /^.+\/(src|lib|test|tests)\/.*/gi;
+const ignoredDirectoryPattern = /^.+\/(src|lib|test|tests)\/.*/gi;
 // Michael Jackson's unpkg source
 // https://github.com/unpkg/unpkg.com/blob/21ed6ee42e298b7eb640ed35912e9c0355c1270d/modules/middleware/findFile.js#L29
 // Turns 'package/dist/jquery.js into 'dist/jquery.js
@@ -55,7 +58,10 @@ function printTarJavaScriptFiles(tarUrl) {
         if (entry.path.endsWith(".js")) {
           const javaScriptFile = entry.path.replace(leadingSegmentPattern, "");
           // Lodash has a 💩 load of helper files starting with "_"
-          if (!javaScriptFile.startsWith("_")) entries.push(javaScriptFile);
+          if (javaScriptFile.startsWith("_")) return;
+          if (javaScriptFile.endsWith(".config.js")) return;
+
+          entries.push(javaScriptFile);
         }
       })
       .on("end", () => {
