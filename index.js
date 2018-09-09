@@ -36,6 +36,7 @@ const ignoredDirectoryPattern = /^.+\/(src|lib|test|tests)\/.*/gi;
 // https://github.com/unpkg/unpkg.com/blob/21ed6ee42e298b7eb640ed35912e9c0355c1270d/modules/middleware/findFile.js#L29
 // Turns 'package/dist/jquery.js into 'dist/jquery.js
 const leadingSegmentPattern = /^[^/]+\/?/gi;
+const includedFilePattern = /\.(js|map)$/gi;
 
 function printTarJavaScriptFiles(tarUrl) {
   axios({
@@ -55,7 +56,8 @@ function printTarJavaScriptFiles(tarUrl) {
         // console.log(`=====================================`);
         if (entry.path.match(ignoredDirectoryPattern)) return;
 
-        if (entry.path.endsWith(".js")) {
+        // if (entry.path.endsWith(".js")) {
+        if (entry.path.match(includedFilePattern)) {
           const javaScriptFile = entry.path.replace(leadingSegmentPattern, "");
           // Lodash has a 💩 load of helper files starting with "_"
           if (javaScriptFile.startsWith("_")) return;
