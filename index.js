@@ -22,7 +22,8 @@ const urls = [
   `https://registry.npmjs.org/jquery/-/jquery-3.3.1.tgz`,
   `http://registry.npmjs.org/react/-/react-16.4.0-alpha.7926752.tgz`,
   `https://registry.npmjs.org/chalk/-/chalk-2.4.1.tgz`,
-  `http://registry.npmjs.org/express/-/express-4.16.3.tgz`
+  `http://registry.npmjs.org/express/-/express-4.16.3.tgz`,
+  `https://registry.npmjs.org/lodash/-/lodash-4.17.10.tgz`
 ];
 
 urls.forEach(printTarJavaScriptFiles);
@@ -50,8 +51,12 @@ function printTarJavaScriptFiles(tarUrl) {
         // if (entry.path.endsWith(".js")) console.log(entry.path);
         // console.log(`=====================================`);
         if (entry.path.match(ignoredDirectoryPattern)) return;
-        if (entry.path.endsWith(".js"))
-          entries.push(entry.path.replace(leadingSegmentPattern, ""));
+
+        if (entry.path.endsWith(".js")) {
+          const javaScriptFile = entry.path.replace(leadingSegmentPattern, "");
+          // Lodash has a 💩 load of helper files starting with "_"
+          if (!javaScriptFile.startsWith("_")) entries.push(javaScriptFile);
+        }
       })
       .on("end", () => {
         console.log(`+++++++++++++++++++++++++++++++++++++`);
